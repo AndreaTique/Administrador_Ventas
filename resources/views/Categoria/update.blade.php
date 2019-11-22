@@ -59,38 +59,29 @@
                     </div>
 
                     <div class="form-group has-feedback">
-                      <label>Departamento</label>
-                      @error ('departamento')
+                        <label>Departamento (departamento)</label>
+                        @error ('departamento')
+                        <div class="ui orange message">este Campo es Obligatorio!</div>
+                        @enderror
+                       <select id="selectDepa" name="departamento" >
+                       <option value="{{ $updatecategoria->id_departamento}}">{{ $updatecategoria->departamento}}</option>
+                       @foreach ($data['departamentos'] as $departamento)
+                                <option id="lista1" name="lista1" value="{{ $departamento->id_departamento }}">{{$departamento->departamento}}
+                                </option>
+                                    @endforeach
+                      </select>
+                       <span class=""></span>
+                     </div>
+                     <div class="form-group has-feedback">
+                      <label>Municipio (municipio)</label>
+                      @error ('municipio')
                       <div class="ui orange message">este Campo es Obligatorio!</div>
                       @enderror
-                     <select name="departamento" >
-                     <option value="{{ $updatecategoria->departamento}}">{{ $updatecategoria->departamento}}</option>
-                     
-                     <?php $infodepartamento = DB::table('departamentos')->get(); ?>
-                     @foreach ($infodepartamento as $departamento)
-                              <option value="{{ $departamento->departamento }}">{{$departamento->departamento}}
-                              </option>
-                                  @endforeach
-                    </select>
-                     <span class=""></span>
+                      <br>
+                      <select id="selectMuni" name="municipio" >
+                          <option value="{{ $updatecategoria->id_municipio}}">{{ $updatecategoria->municipio}}</option> 
+                      </select>
                    </div>
-          
-                   <div class="form-group has-feedback">
-                    <label>Municipio</label>
-                    @error ('municipio')
-                    <div class="ui orange message">este Campo es Obligatorio!</div>
-                    @enderror
-                   <select name="municipio" >
-                   <option value="{{ $updatecategoria->municipio}}">{{ $updatecategoria->municipio}}</option>
-
-                   <?php $infomunicipios = DB::table('municipios')->get(); ?>
-                     @foreach ($infomunicipios as $municipio)
-                              <option value="{{ $municipio->municipio }}">{{$municipio->municipio}}
-                              </option>
-                                  @endforeach
-                  </select>
-                   <span class=""></span>
-                 </div>
             
                     <center>
                 
@@ -123,7 +114,24 @@
         });
       });
     </script>
-
+    <script>
+        $(document).ready(function()
+        {
+          $("select#selectDepa").change(function(){
+            if ($("select#selectDepa").val() != "")
+            {
+              var arMunicipios = <?php echo json_encode($data['municipios']); ?>;
+              $("select#selectMuni").empty();
+              $("select#selectMuni").append("<option value=''>SELECCIONE...</option>");
+              arMunicipios.forEach(m => {
+                if ($("select#selectDepa").val() == m.departamento_id) {
+                  $("select#selectMuni").append("<option value='" + m.id_municipio + "'>" + m.municipio + "</option>");
+                }
+              });
+            }
+          });
+        });
+      </script>
     
   </body>
 </html>

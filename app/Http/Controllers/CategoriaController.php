@@ -35,8 +35,8 @@ protected function InsertCate(Request $request)
     $user=new App\Categorias;
     $user->nombre=$request->nombre;
     $user->fecha=$request->fecha;
-    $user->departamento=$request->departamento;
-    $user->municipio=$request->municipio;
+    $user->departamento=DB::table('departamentos')->where('id_departamento', $request->departamento)->value('departamento');
+    $user->municipio=DB::table('municipios')->where('id_municipio', $request->municipio)->value('municipio');;
     $user->save();
 
         return redirect('Categoria/view');
@@ -60,8 +60,11 @@ protected function InsertCate(Request $request)
     
     public function UpdateCate($id)
     {
+        $data['departamentos'] = App\departamento::all();
+        $data['municipios'] = App\municipios::all();
         $updatecategoria = App\Categorias::FindOrFail($id);
-        return view('Categoria/update',compact('updatecategoria'));
+        return view('Categoria/update',compact('data','updatecategoria'));
+        
     }
 
     public function UpdateBdCate(Request $categoria)
@@ -71,8 +74,8 @@ protected function InsertCate(Request $request)
      
         $instanciacategoria->nombre=$categoria->nombre;
         $instanciacategoria->fecha=$categoria->fecha;
-        $instanciacategoria->departamento=$categoria->departamento;
-        $instanciacategoria->municipio=$categoria->municipio;
+        $instanciacategoria->departamento=DB::table('departamentos')->where('id_departamento', $categoria->departamento)->value('departamento');
+        $instanciacategoria->municipio=DB::table('municipios')->where('id_municipio', $categoria->municipio)->value('municipio');
         $instanciacategoria->update();
 
         return redirect('Categoria/view');

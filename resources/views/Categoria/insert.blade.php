@@ -110,13 +110,6 @@
           increaseArea: '20%' // optional
         });
       });
-
-      $(document).ready(function(){
-        recargarlista();
-        $('#lista1').change(function(){
-          recargarlista();
-        });
-      });
     </script>
 
 <script>
