@@ -9,6 +9,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Sistema Ventas | Log in</title>
+
+    <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -59,31 +61,24 @@
             @error ('departamento')
             <div class="ui orange message">este Campo es Obligatorio!</div>
             @enderror
-           <select name="departamento" >
-           <option value="{{ old('departamento') }}">SELECCIONE</option>  
-           
-           <?php $infodepartamento = DB::table('departamentos')->get(); ?>
-           @foreach ($infodepartamento as $departamento)
-                    <option id="lista1" name="lista1" value="{{ $departamento->departamento }}">{{$departamento->departamento}}
+           <select id="selectDepa" name="departamento" >
+           <option value="">SELECCIONE</option>
+           @foreach ($data['departamentos'] as $departamento)
+                    <option id="lista1" name="lista1" value="{{ $departamento->id_departamento }}">{{$departamento->departamento}}
                     </option>
                         @endforeach
           </select>
            <span class=""></span>
          </div>
-
          <div class="form-group has-feedback">
-          <label>Municipio</label>
+          <label>Municipio (municipio)</label>
           @error ('municipio')
           <div class="ui orange message">este Campo es Obligatorio!</div>
           @enderror
-          <select name="municipio" >
-              <option value="{{ old('municipio') }}">SELECCIONE</option> 
-          <?php $infomunicipio = DB::table('municipios')->get(); ?>
-          @foreach ($infomunicipio as $municipio)
-                   <option id="lista1" name="lista1" value="{{ $municipio->municipio }}">{{$municipio->municipio}}
-                   </option>
-                       @endforeach
-                      </select>
+          <br>
+          <select id="selectMuni" name="municipio" >
+              <option value="">SELECCIONE</option> 
+          </select>
        </div>
             
           <div class="row">
@@ -124,16 +119,20 @@
       });
     </script>
 
-<script type="text/javascript">
-
-  function recargarlista(){
-    
-    $.ajax({
-      type:"POST",
-      url:"Categorias/insert",
-      data:"departamento=" + $('#lista1').val();
-      success:function(r){
-        $('#select2').html(r);
+<script>
+  $(document).ready(function()
+  {
+    $("select#selectDepa").change(function(){
+      if ($("select#selectDepa").val() != "")
+      {
+        var arMunicipios = <?php echo json_encode($data['municipios']); ?>;
+        $("select#selectMuni").empty();
+        $("select#selectMuni").append("<option value=''>SELECCIONE...</option>");
+        arMunicipios.forEach(m => {
+          if ($("select#selectDepa").val() == m.departamento_id) {
+            $("select#selectMuni").append("<option value='" + m.id_municipio + "'>" + m.municipio + "</option>");
+          }
+        });
       }
     });
   });

@@ -41,9 +41,7 @@ Route::get('Login/login','LoginController@getLogin');
 #endregion
 
 #region para Categoria
-Route::get('Categoria/insert', function () {
-    return view('Categoria/insert');
-})->name('insertarcate');
+Route::get('Categoria/insert', "CategoriaController@ViewInsertCate")->name('insertarcate');
 
 // Route::post('Categoria/insert','CategoriaController@InsertCate')->name('InsertCategoria');
 

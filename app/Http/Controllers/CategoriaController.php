@@ -15,7 +15,14 @@ class CategoriaController extends Controller
     //     return view("Registro/registro");
     // }
 
-    
+
+    public function ViewInsertCate()
+    {
+        $data['departamentos'] = App\departamento::all();
+        $data['municipios'] = App\municipios::all();
+
+        return view('Categoria/insert',compact('data'));
+    }
 protected function InsertCate(Request $request)
 {
     $this->validate($request, [
